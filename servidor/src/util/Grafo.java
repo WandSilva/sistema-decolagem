@@ -32,6 +32,13 @@ public class Grafo {
         return (this.grafo.get(origem));
     }
 
+
+    public ArrayList<String> getVertices(){
+        ArrayList<String> lista = new ArrayList<>();
+        lista.addAll(this.grafo.keySet());
+        return lista;
+    }
+
     /**
      * Método que recebe a origem e o destino, e cria um trecho entre eles.
      *

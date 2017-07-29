@@ -1,5 +1,6 @@
 package rmi;
 
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
@@ -19,10 +20,13 @@ public class Servidor {
             Naming.bind("GuicheService", (Remote) guiche);
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     public static void main(String args[]) {
         new Servidor();
+        System.out.println("Servidor iniciado");
     }
 }
