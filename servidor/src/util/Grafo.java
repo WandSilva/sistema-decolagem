@@ -1,126 +1,98 @@
 package util;
 
+import java.util.*;
+
 /**
- * Created by wanderson on 28/07/17.
+ * Created by wanderson on 29/07/17.
  */
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Grafo {
-    public class Vertice {
-        String nome;
-        List<Aresta> adj;
 
-        Vertice(String nome) {
-            this.nome = nome;
-            this.adj = new ArrayList<Aresta>();
-        }
+    private HashMap<String, ArrayList<String>> grafo;   //Lista de adjacência
+    private Stack<String> caminhoAtual;   //Pilha de caminho atual
+    private TreeSet<String> visitados;   //Conjunto de vértices visitados no caminho
+    private ArrayList<String> rotas;
 
-        void addAdj(Aresta e) {
-            adj.add(e);
-        }
-
-        public String getNome() {
-            return nome;
-        }
-    }
-
-    public class Aresta {
-        Vertice origem;
-        Vertice destino;
-
-        Aresta(Vertice origem, Vertice destino) {
-            this.origem = origem;
-            this.destino = destino;
-        }
-    }
-
-    List<Vertice> vertices;
-    List<Aresta> arestas;
-
+    /**
+     * Construtor da classe, o grafo é inicializado.
+     */
     public Grafo() {
-        vertices = new ArrayList<Vertice>();
-        arestas = new ArrayList<Aresta>();
+        this.grafo = new HashMap<String, ArrayList<String>>();
+        this.rotas = new ArrayList<>();
+        this.caminhoAtual = new Stack<>();
+        this.visitados = new TreeSet<>();
     }
 
-    Vertice addVertice(String nome) {
-        Vertice v = new Vertice(nome);
-        vertices.add(v);
-        return v;
+    /**
+     * Método que retorna as cidades vizinhas de uma dada origem.
+     *
+     * @param origem
+     * @return ArrayList
+     */
+    public ArrayList<String> getVizinhos(String origem) {
+        return (this.grafo.get(origem));
     }
 
-    Aresta addAresta(Vertice origem, Vertice destino) {
-        Aresta e = new Aresta(origem, destino);
-        origem.addAdj(e);
-        arestas.add(e);
-        return e;
-    }
+    /**
+     * Método que recebe a origem e o destino, e cria um trecho entre eles.
+     *
+     * @param origem
+     * @param destino
+     */
+    public void addTrecho(String origem, String destino) {
 
-    public String toString() {
-        String r = "";
-        for (Vertice u : vertices) {
-            r += u.nome + " -> ";
-            for (Aresta e : u.adj) {
-                Vertice v = e.destino;
-                r += v.nome + ", ";
-            }
-            r += "\n";
+        if (this.grafo.containsKey(origem)) {
+            this.grafo.get(origem).add(destino);
+        } else {
+            ArrayList<String> vizinhos = new ArrayList<String>();
+            vizinhos.add(destino);
+            this.grafo.put(origem, vizinhos);
         }
-        return r;
     }
 
-    public static void main(String[] args) throws IOException {
-        ArrayList<Vertice> array = new ArrayList();
-        Grafo g = new Grafo();
-        Vertice v1 = null;
-        Vertice v2 = null;
+    /**
+     * Método que identifica todas as possíveis rotas formadas a partir da origem
+     * e destino especificados.
+     *  @param origem
+     * @param destino
+     */
+    public ArrayList<String> caminhosPossiveis(String origem, String destino) {
+        caminhoAtual.push(origem);   //Adiciona cidade na pilha
+        visitados.add(origem);   //Adiciona cidade na lista de visitadas
 
-        Scanner scanner = new Scanner(new FileReader("rotas.data")).useDelimiter("\\||\\n");
+        if (origem.equals(destino)) {   //Se chegou no destino:
+            rotas.add(caminhoAtual.toString());
+        } else {   //Se não:
+            //Pega vizinhos de tal origem no próprio servidor:
+            ArrayList<String> vizinhos = getVizinhos(origem);
 
-        while (scanner.hasNext()) {
-            String linha = scanner.nextLine();
-            if (linha.startsWith(";")) {
-                String[] aux = linha.trim().split(";");
-                for (int i = 0; i < aux.length - 1; i++) {
-                    System.out.println("vertice.." + aux[i + 1] + ".");
-                    array.add(g.addVertice(aux[i + 1]));
-                }
-            } else{
-                String[] aux = linha.trim().split(":");
-                for (int i = 0; i < array.size(); i++) {
-                    if (array.get(i).getNome().equals(aux[0])) {
-                        v1 = array.get(i);
-                        for (int j = 0; j < array.size(); j++) {
-                            if (array.get(j).getNome().equals(aux[1])) {
-                                v2 = array.get(j);
-                                g.addAresta(v1, v2);
-                                v1 = null;
-                                v2 = null;
-                            }
-                        }
-                    }
+            for (String vizinho : vizinhos) {   //Percorre a lista de vizinhos
+
+                if (!visitados.contains(vizinho)) {   //Se ainda não foi visitada:
+                    //Método recursivo que estabelece caminhos possíveis a partir dela:
+                    caminhosPossiveis(vizinho, destino);
                 }
             }
         }
+        caminhoAtual.pop();   //Remove cidade-topo da pilha
+        visitados.remove(origem);   //Remove cidade da lista de visitadas
 
-        System.out.println("tam: " + array.size());
-        System.out.println(g);
+        if (caminhoAtual.empty()){
+            ArrayList<String> aux = new ArrayList<>();
+            aux.addAll(rotas);
+            rotas.clear();
+            return aux;
+        }
+        return null;
     }
+
+    public void teste() {
+        for (String name : grafo.keySet()) {
+
+            String key = name.toString();
+            String value = grafo.get(name).toString();
+            System.out.println(key + " " + value);
+        }
+    }
+
 }
 
-
- /*Grafo f = new Grafo();
-        Vertice s = f.addVertice("s");
-        Vertice t = f.addVertice("t");
-        Vertice y = f.addVertice("y");
-        Aresta st = f.addAresta(s, t);
-        Aresta sy = f.addAresta(s, y);
-        Aresta ty = f.addAresta(t, y);
-        Aresta yt = f.addAresta(y, t);
-        System.out.println(f);*/
