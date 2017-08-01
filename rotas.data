@@ -1,6 +1,6 @@
-;A;B;C;D;E
-A:B
-B:C
+A:C
 C:D
-D:E
+D:B
 E:A
+A:D
+B:C

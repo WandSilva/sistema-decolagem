@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
+import java.util.TreeSet;
 
 /**
  * Created by wanderson on 28/07/17.
@@ -13,9 +15,15 @@ import java.util.Scanner;
 public class Controller {
 
     private Grafo grafo;
+    private Stack<String> caminhoAtual;   //Pilha de caminho atual
+    private TreeSet<String> visitados;   //Conjunto de vértices visitados no caminho
+    private ArrayList<String> rotas;
 
     public Controller() {
         this.grafo = new Grafo();
+        this.rotas = new ArrayList<>();
+        this.caminhoAtual = new Stack<>();
+        this.visitados = new TreeSet<>();
     }
 
     public void criarRotas() throws FileNotFoundException {
@@ -28,13 +36,36 @@ public class Controller {
         }
     }
 
-    public Grafo getGrafo() {
-        return grafo;
+    public ArrayList<String> buscarRotas(String origem, String destino) {
+        caminhoAtual.push(origem);   //Adiciona cidade na pilha
+        visitados.add(origem);   //Adiciona cidade na lista de visitadas
+
+        if (origem.equals(destino)) {   //Se chegou no destino:
+            rotas.add(caminhoAtual.toString());
+        } else {   //Se não:
+            //Pega vizinhos de tal origem no próprio servidor:
+            ArrayList<String> vizinhos = grafo.getVizinhos(origem);
+
+            for (String vizinho : vizinhos) {   //Percorre a lista de vizinhos
+
+                if (!visitados.contains(vizinho)) {   //Se ainda não foi visitada:
+                    //Método recursivo que estabelece caminhos possíveis a partir dela:
+                    buscarRotas(vizinho, destino);
+                }
+            }
+        }
+        caminhoAtual.pop();   //Remove cidade-topo da pilha
+        visitados.remove(origem);   //Remove cidade da lista de visitadas
+
+        if (caminhoAtual.empty()){
+            ArrayList<String> aux = new ArrayList<>();
+            aux.addAll(rotas);
+            rotas.clear();
+            return aux;
+        }
+        return null;
     }
 
-    public ArrayList<String> buscarRotas(String origem, String destino) {
-        return grafo.caminhosPossiveis(origem, destino);
-    }
 
     public ArrayList<String> buscarLocais() {
         return grafo.getVertices();
