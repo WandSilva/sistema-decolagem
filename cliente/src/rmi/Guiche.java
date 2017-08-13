@@ -9,6 +9,5 @@ import java.util.ArrayList;
  */
 public interface Guiche extends Remote {
     public ArrayList<String> pesquisarRotas(String origem, String destino) throws RemoteException;
-
     public ArrayList<String> buscarLocais();
 }

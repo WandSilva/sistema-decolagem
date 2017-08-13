@@ -1,6 +1,5 @@
 package view;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +11,11 @@ import javafx.stage.WindowEvent;
 /**
  * Created by wanderson on 28/07/17.
  */
-public class Main extends Application {
+public class Main extends javafx.application.Application {
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
