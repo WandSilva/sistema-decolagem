@@ -1,6 +1,7 @@
 package controller;
 
 import util.Grafo;
+import util.Rota;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,7 +33,7 @@ public class Controller {
         while (scanner.hasNext()) {
             String linha = scanner.nextLine();
             String[] aux = linha.trim().split(":");
-            this.grafo.addTrecho(aux[0], aux[1]);
+            this.grafo.addTrecho(aux[0], aux[1], aux[2]);
         }
     }
 
@@ -44,13 +45,13 @@ public class Controller {
             rotas.add(caminhoAtual.toString());
         } else {   //Se não:
             //Pega vizinhos de tal origem no próprio servidor:
-            ArrayList<String> vizinhos = grafo.getVizinhos(origem);
+            ArrayList<Rota> vizinhos = grafo.getVizinhos(origem);
 
-            for (String vizinho : vizinhos) {   //Percorre a lista de vizinhos
+            for (Rota rotas : vizinhos) {   //Percorre a lista de vizinhos
 
-                if (!visitados.contains(vizinho)) {   //Se ainda não foi visitada:
+                if (!visitados.contains(rotas.getLocal())) {   //Se ainda não foi visitada:
                     //Método recursivo que estabelece caminhos possíveis a partir dela:
-                    buscarRotas(vizinho, destino);
+                    buscarRotas(rotas.getLocal(), destino);
                 }
             }
         }

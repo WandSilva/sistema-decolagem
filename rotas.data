@@ -1,6 +1,6 @@
-A:C
-C:D
-D:B
-E:A
-A:D
-B:C
+A:C:1
+C:D:2
+D:B:3
+E:A:3
+A:D:2
+B:C:1

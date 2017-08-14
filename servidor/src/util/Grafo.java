@@ -7,14 +7,14 @@ import java.util.*;
  */
 public class Grafo {
 
-    private HashMap<String, ArrayList<String>> grafo;   //Lista de adjacência
+    private HashMap<String, ArrayList<Rota>> grafo;   //Lista de adjacência
 
 
     /**
      * Construtor da classe, o grafo é inicializado.
      */
     public Grafo() {
-        this.grafo = new HashMap<String, ArrayList<String>>();
+        this.grafo = new HashMap<String, ArrayList<Rota>>();
     }
 
     /**
@@ -23,7 +23,7 @@ public class Grafo {
      * @param origem
      * @return ArrayList
      */
-    public ArrayList<String> getVizinhos(String origem) {
+    public ArrayList<Rota> getVizinhos(String origem) {
         return (this.grafo.get(origem));
     }
 
@@ -40,13 +40,13 @@ public class Grafo {
      * @param origem
      * @param destino
      */
-    public void addTrecho(String origem, String destino) {
+    public void addTrecho(String origem, String destino, String peso) {
 
         if (this.grafo.containsKey(origem)) {
-            this.grafo.get(origem).add(destino);
+            this.grafo.get(origem).add(new Rota(destino, Integer.parseInt(peso)));
         } else {
-            ArrayList<String> vizinhos = new ArrayList<String>();
-            vizinhos.add(destino);
+            ArrayList<Rota> vizinhos = new ArrayList<>();
+            vizinhos.add(new Rota(destino, Integer.parseInt(peso)));
             this.grafo.put(origem, vizinhos);
         }
     }
