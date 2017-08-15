@@ -1,14 +1,19 @@
 package controller;
 
+import java.io.BufferedReader;
 import util.Grafo;
 import util.Rota;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by wanderson on 28/07/17.
@@ -27,28 +32,26 @@ public class Controller {
         this.visitados = new TreeSet<>();
     }
 
-    public void criarRotas(String server) throws FileNotFoundException {
-//        Scanner scanner = new Scanner(new FileReader("rotas.data")).useDelimiter("\\||\\n");
-//
-//        while (scanner.hasNext()) {
-//            String linha = scanner.nextLine();
-//            String[] aux = linha.trim().split(":");
-//            this.grafo.addTrecho(aux[0], aux[1], aux[2]);
-//        }
-        
-        if(server.equals("A")){
-            this.grafo.addTrecho("A","C","1");
-            this.grafo.addTrecho("C","D","2");
-        } else if(server.equals("B")){
-            this.grafo.addTrecho("D","B","3");
-            this.grafo.addTrecho("E","A","3");
-        } else{
-            this.grafo.addTrecho("A","D","2");
-            this.grafo.addTrecho("B","C","1");
+    public void criarRotas() {
+
+        try {
+            BufferedReader bf = new BufferedReader(new FileReader("rotas.data"));
+
+            String linha;
+            linha = bf.readLine();
+            while (linha != null) {
+                String[] aux = linha.trim().split(":");
+                this.grafo.addTrecho(aux[0], aux[1], aux[2]);
+                linha = bf.readLine();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public ArrayList<String> buscarRotas(String origem, String destino) {
+
         caminhoAtual.push(origem);   //Adiciona cidade na pilha
         visitados.add(origem);   //Adiciona cidade na lista de visitadas
 
@@ -69,7 +72,7 @@ public class Controller {
         caminhoAtual.pop();   //Remove cidade-topo da pilha
         visitados.remove(origem);   //Remove cidade da lista de visitadas
 
-        if (caminhoAtual.empty()){
+        if (caminhoAtual.empty()) {
             ArrayList<String> aux = new ArrayList<>();
             aux.addAll(rotas);
             rotas.clear();
@@ -77,7 +80,6 @@ public class Controller {
         }
         return null;
     }
-
 
     public ArrayList<String> buscarLocais() {
         return grafo.getVertices();
@@ -104,5 +106,4 @@ public class Controller {
 //            System.out.println(lista2.get(i));
 //        }
 //    }
-
 }

@@ -14,10 +14,10 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
 
     private Controller controller;
 
-    protected GuicheImp(String server) throws RemoteException, FileNotFoundException {
+    protected GuicheImp() throws RemoteException, FileNotFoundException {
         super();
         this.controller = new Controller();
-        this.controller.criarRotas(server);
+        this.controller.criarRotas();
     }
 
     @Override
