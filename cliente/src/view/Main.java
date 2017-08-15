@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.swing.JOptionPane;
 
 /**
  * Created by wanderson on 28/07/17.
@@ -25,9 +26,9 @@ public class Main extends javafx.application.Application {
                 System.exit(0);
             }
         });
-
+        
         Parent root = FXMLLoader.load(getClass().getResource("View.fxml"));
-        primaryStage.setTitle("Sistema de decolagem");
+        primaryStage.setTitle("VoaVoaTecoTeco");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
