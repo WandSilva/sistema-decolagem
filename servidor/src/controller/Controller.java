@@ -27,13 +27,24 @@ public class Controller {
         this.visitados = new TreeSet<>();
     }
 
-    public void criarRotas() throws FileNotFoundException {
-        Scanner scanner = new Scanner(new FileReader("rotas.data")).useDelimiter("\\||\\n");
-
-        while (scanner.hasNext()) {
-            String linha = scanner.nextLine();
-            String[] aux = linha.trim().split(":");
-            this.grafo.addTrecho(aux[0], aux[1], aux[2]);
+    public void criarRotas(String server) throws FileNotFoundException {
+//        Scanner scanner = new Scanner(new FileReader("rotas.data")).useDelimiter("\\||\\n");
+//
+//        while (scanner.hasNext()) {
+//            String linha = scanner.nextLine();
+//            String[] aux = linha.trim().split(":");
+//            this.grafo.addTrecho(aux[0], aux[1], aux[2]);
+//        }
+        
+        if(server.equals("A")){
+            this.grafo.addTrecho("A","C","1");
+            this.grafo.addTrecho("C","D","2");
+        } else if(server.equals("B")){
+            this.grafo.addTrecho("D","B","3");
+            this.grafo.addTrecho("E","A","3");
+        } else{
+            this.grafo.addTrecho("A","D","2");
+            this.grafo.addTrecho("B","C","1");
         }
     }
 
@@ -72,26 +83,26 @@ public class Controller {
         return grafo.getVertices();
     }
 
-    //usando para testar o grafo
-    public static void main(String[] args) {
-        Controller c = new Controller();
-        try {
-            c.criarRotas();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ArrayList lista1=c.buscarLocais();
-
-        System.out.println("_______locais___________");
-        for (int i = 0; i < lista1.size(); i++) {
-            System.out.println(lista1.get(i));
-        }
-
-        ArrayList lista2 = c.buscarRotas("A", "B");
-        System.out.println("_______caminho___________");
-        for (int i = 0; i < lista2.size(); i++) {
-            System.out.println(lista2.get(i));
-        }
-    }
+//    //usando para testar o grafo
+//    public static void main(String[] args) {
+//        Controller c = new Controller();
+//        try {
+//            c.criarRotas();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        ArrayList lista1=c.buscarLocais();
+//
+//        System.out.println("_______locais___________");
+//        for (int i = 0; i < lista1.size(); i++) {
+//            System.out.println(lista1.get(i));
+//        }
+//
+//        ArrayList lista2 = c.buscarRotas("A", "B");
+//        System.out.println("_______caminho___________");
+//        for (int i = 0; i < lista2.size(); i++) {
+//            System.out.println(lista2.get(i));
+//        }
+//    }
 
 }

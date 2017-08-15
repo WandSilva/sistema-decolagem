@@ -12,12 +12,15 @@ import java.rmi.registry.LocateRegistry;
  * Created by wanderson on 28/07/17.
  */
 public class Servidor {
-
     public Servidor() {
         try {
             LocateRegistry.createRegistry(1099);
-            Guiche guiche = new GuicheImp();
-            Naming.bind("GuicheService", (Remote) guiche);
+            Guiche servidorA = new GuicheImp("A");
+            Guiche servidorB = new GuicheImp("B");
+            Guiche servidorC = new GuicheImp("C");
+            Naming.bind("servidorA", (Remote) servidorA);
+            Naming.bind("servidorB", (Remote) servidorB);
+            Naming.bind("servidorC", (Remote) servidorC);
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -26,7 +29,10 @@ public class Servidor {
     }
 
     public static void main(String args[]) {
-        new Servidor();
+        Servidor servidor = new Servidor();
+        
+        
+        
         System.out.println("Servidor iniciado");
     }
 }
