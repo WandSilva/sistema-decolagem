@@ -12,15 +12,13 @@ import javax.swing.JOptionPane;
  */
 public class Cliente {
     private Guiche guiche;
-    private String end;
-    private String serv;
+    private String endacesso;
     
     public Cliente() {        
-        this.end = JOptionPane.showInputDialog(null, "Digite o IP do Servidor");
-        this.serv = JOptionPane.showInputDialog(null, "Qual a companhia?");
+        this.endacesso = JOptionPane.showInputDialog(null, "Digite o IP do Servidor de Acesso");    
         
         try {
-            this.guiche = (Guiche) Naming.lookup("rmi://"+end+":1099/servidor"+serv);
+            this.guiche = (Guiche) Naming.lookup("rmi://"+endacesso+":1099/servidor");
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             e.printStackTrace();
         }
@@ -32,5 +30,5 @@ public class Cliente {
 
     public ArrayList<String> buscarRotas(String orgigem, String destino) throws RemoteException {
         return guiche.pesquisarRotas(orgigem, destino);
-    }
+    }  
 }
