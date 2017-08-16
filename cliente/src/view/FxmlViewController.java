@@ -44,6 +44,7 @@ public class FxmlViewController implements Initializable {
     public void buscar(ActionEvent e){
         try {
             ArrayList<String> lista = cliente.buscarRotas(comboOrigem.getValue(), comboDestino.getValue());
+            listView.getItems().clear();
             listView.getItems().addAll(lista);
             System.out.println(lista);
         } catch (RemoteException e1) {
