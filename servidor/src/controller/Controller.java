@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.BufferedReader;
+
 import util.Grafo;
 import util.Rota;
 
@@ -83,6 +84,21 @@ public class Controller {
 
     public ArrayList<String> buscarLocais() {
         return grafo.getVertices();
+    }
+
+    public void comprar(ArrayList<String> rota) {
+
+        for (int i = 0; i < rota.size(); i++) {
+            ArrayList<Rota> caminho = grafo.getVizinhos(rota.get(i));
+
+            for (int j = 0; j < caminho.size(); j++) {
+                if (i < rota.size()) {
+                    if (caminho.get(i).getLocal().equals(rota.get(i + 1))) {
+                        caminho.get(i).setPeso(caminho.get(i).getPeso() - 1);
+                    }
+                }
+            }
+        }
     }
 
 //    //usando para testar o grafo

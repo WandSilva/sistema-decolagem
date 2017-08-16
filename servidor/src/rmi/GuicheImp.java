@@ -11,6 +11,10 @@ import java.util.ArrayList;
  * Created by wanderson on 28/07/17.
  */
 public class GuicheImp extends UnicastRemoteObject implements Guiche {
+    @Override
+    public void comprarRota(ArrayList<String> rota) throws RemoteException {
+        this.controller.comprar(rota);
+    }
 
     private Controller controller;
 
