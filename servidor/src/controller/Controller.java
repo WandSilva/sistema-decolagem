@@ -86,15 +86,21 @@ public class Controller {
         return grafo.getVertices();
     }
 
-    public void comprar(ArrayList<String> rota) {
+    public void comprar(String rota) {
+        String aux = rota.replace("[", "").replace("]", "").replace(" ", "");;
+        String[] aux2 = aux.trim().split(",");
 
-        for (int i = 0; i < rota.size(); i++) {
-            ArrayList<Rota> caminho = grafo.getVizinhos(rota.get(i));
+        System.out.println("teste: "+aux2);
+
+        for (int i = 0; i < aux2.length; i++) {
+
+            ArrayList<Rota> caminho = grafo.getVizinhos(aux2[i]);
+
 
             for (int j = 0; j < caminho.size(); j++) {
-                if (i < rota.size()) {
-                    if (caminho.get(i).getLocal().equals(rota.get(i + 1))) {
-                        caminho.get(i).setPeso(caminho.get(i).getPeso() - 1);
+                if (i < aux2.length) {
+                    if (caminho.get(j).getLocal().equals(aux2[i + 1])) {
+                        caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
                     }
                 }
             }

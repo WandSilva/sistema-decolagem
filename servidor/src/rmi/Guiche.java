@@ -11,5 +11,5 @@ import java.util.ArrayList;
 public interface Guiche extends Remote {
     public ArrayList<String> pesquisarRotas(String origem, String destino) throws RemoteException;
     public ArrayList<String> buscarLocais() throws RemoteException;
-    public void comprarRota(ArrayList<String> rota) throws RemoteException;
+    public void comprarRota(String rota) throws RemoteException;
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class GuicheImp extends UnicastRemoteObject implements Guiche {
     @Override
-    public void comprarRota(ArrayList<String> rota) throws RemoteException {
+    public void comprarRota(String rota) throws RemoteException {
         this.controller.comprar(rota);
     }
 

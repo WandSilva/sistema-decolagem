@@ -30,5 +30,8 @@ public class Cliente {
 
     public ArrayList<String> buscarRotas(String orgigem, String destino) throws RemoteException {
         return guiche.pesquisarRotas(orgigem, destino);
-    }  
+    }
+    public void comprarRota(String rota) throws RemoteException {
+        guiche.comprarRota(rota);
+    }
 }

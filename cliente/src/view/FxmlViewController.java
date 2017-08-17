@@ -36,12 +36,12 @@ public class FxmlViewController implements Initializable {
         obterLocais();
     }
 
-    public void obterLocais(){
+    public void obterLocais() {
         comboOrigem.getItems().addAll(cliente.buscarLocais());
         comboDestino.getItems().addAll(cliente.buscarLocais());
     }
 
-    public void buscar(ActionEvent e){
+    public void buscar(ActionEvent e) {
         try {
             ArrayList<String> lista = cliente.buscarRotas(comboOrigem.getValue(), comboDestino.getValue());
             listView.getItems().clear();
@@ -50,6 +50,14 @@ public class FxmlViewController implements Initializable {
         } catch (RemoteException e1) {
             e1.printStackTrace();
         }
+    }
 
+    public void comprarRota() {
+
+        try {
+            cliente.comprarRota(listView.getSelectionModel().getSelectedItem());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }
