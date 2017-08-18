@@ -64,7 +64,7 @@ public class Controller {
 
             for (Rota rotas : vizinhos) {   //Percorre a lista de vizinhos
 
-                if (!visitados.contains(rotas.getLocal())) {   //Se ainda não foi visitada:
+                if (!visitados.contains(rotas.getLocal()) && rotas.getPeso()>0) {   //Se ainda não foi visitada:
                     //Método recursivo que estabelece caminhos possíveis a partir dela:
                     buscarRotas(rotas.getLocal(), destino);
                 }
@@ -91,15 +91,17 @@ public class Controller {
         String[] aux2 = aux.trim().split(",");
 
         System.out.println("teste: "+aux2);
+        System.out.println("teste: "+aux2.length);
+        ArrayList<Rota> caminho;
 
         for (int i = 0; i < aux2.length; i++) {
 
-            ArrayList<Rota> caminho = grafo.getVizinhos(aux2[i]);
+           caminho = grafo.getVizinhos(aux2[i]);
 
 
             for (int j = 0; j < caminho.size(); j++) {
-                if (i < aux2.length) {
-                    if (caminho.get(j).getLocal().equals(aux2[i + 1])) {
+                if (i < aux2.length-1) {
+                    if (caminho.get(j).getLocal().equals(aux2[i+1])) {
                         caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
                     }
                 }

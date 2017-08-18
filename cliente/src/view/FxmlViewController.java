@@ -1,6 +1,5 @@
 package view;
 
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -56,6 +55,7 @@ public class FxmlViewController implements Initializable {
 
         try {
             cliente.comprarRota(listView.getSelectionModel().getSelectedItem());
+            listView.getItems().clear();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
