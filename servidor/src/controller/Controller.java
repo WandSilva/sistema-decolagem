@@ -94,9 +94,9 @@ public class Controller {
             }
 
 
-            System.out.println("Quant servers"+servidoresConectados.size());
+          //  System.out.println("Quant servers"+servidoresConectados.size());
 
-            servidoresConectados.forEach(servers -> System.out.println(servers));
+          //  servidoresConectados.forEach(servers -> System.out.println(servers));
 
             return aux;
         }
@@ -110,11 +110,9 @@ public class Controller {
 
     public void comprar(String rota) {
         String aux = rota.replace("[", "").replace("]", "").replace(" ", "");
-        ;
+
         String[] aux2 = aux.trim().split(",");
 
-        System.out.println("teste: " + aux2);
-        System.out.println("teste: " + aux2.length);
         ArrayList<Rota> caminho;
 
         for (int i = 0; i < aux2.length; i++) {
