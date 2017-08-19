@@ -90,13 +90,19 @@ public class Controller {
             }
 
             for (Guiche g: servidoresConectados) {
-                aux.addAll(g.pesquisarRotas(origem,destino));
+                aux.addAll(g.buscarRotas(origem,destino));
             }
+
+
+            System.out.println("Quant servers"+servidoresConectados.size());
+
+            servidoresConectados.forEach(servers -> System.out.println(servers));
 
             return aux;
         }
         return null;
     }
+
 
     public ArrayList<String> buscarLocais() {
         return grafo.getVertices();
