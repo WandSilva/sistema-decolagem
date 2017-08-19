@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public interface Guiche extends Remote {
     public ArrayList<String> pesquisarRotas(String origem, String destino) throws RemoteException;
+    public void carregarServidores() throws RemoteException;
     public ArrayList<String> buscarLocais() throws RemoteException;
     public void comprarRota(String rota) throws RemoteException;
+    public String getNomeServidor() throws RemoteException;
 }

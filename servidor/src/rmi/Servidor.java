@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  */
 public class Servidor {
 
-    private ArrayList servidores = new ArrayList();
     private String nomeServidor;
 
     public Servidor() {
@@ -27,11 +26,9 @@ public class Servidor {
             bf = new BufferedReader(new FileReader("nome.data"));
             String linha = bf.readLine();
             this.nomeServidor = linha;
-            
             LocateRegistry.createRegistry(1099);
             Guiche servidor = new GuicheImp(nomeServidor);
-            Naming.bind(nomeServidor, (Remote) servidor);
-            carregarServidores();
+            Naming.bind("servidor", (Remote) servidor);
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -42,23 +39,5 @@ public class Servidor {
     public static void main(String args[]) {
         Servidor servidor = new Servidor();
         System.out.println("Servidor iniciado");
-    }
-
-    private void carregarServidores() {
-        BufferedReader bf;
-        try {
-            bf = new BufferedReader(new FileReader("servidores.data"));
-            String linha = bf.readLine();
-
-            while (linha != null) {
-                Guiche guiche = (Guiche) Naming.lookup("rmi://"+linha+":1099/servidor");
-                servidores.add(guiche);
-                linha = bf.readLine();
-            }
-            
-        } catch (Exception ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 }

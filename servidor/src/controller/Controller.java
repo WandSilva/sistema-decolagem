@@ -15,11 +15,15 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import rmi.Guiche;
+import rmi.Servidor;
 
 /**
  * Created by wanderson on 28/07/17.
  */
 public class Controller {
+    
+    private ArrayList servidoresConectados = new ArrayList();
 
     private Grafo grafo;
     private Stack<String> caminhoAtual;   //Pilha de caminho atual
@@ -108,6 +112,28 @@ public class Controller {
             }
         }
     }
+    
+    public void carregarServidores() {
+        BufferedReader bf;
+        try {
+            bf = new BufferedReader(new FileReader("servidores.data"));
+            String linha = bf.readLine();
+            String[] dados = linha.split(" ");
+            
+            //System.out.println("passou aqui");
+            
+            while (linha != null) {
+                dados = linha.split(" ");
+                Guiche guiche = (Guiche) Naming.lookup("rmi://"+dados[0]+":1099/"+dados[1]);
+//                System.out.println(guiche.getNomeServidor());
+                servidoresConectados.add(guiche);
+                linha = bf.readLine();
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
 //    //usando para testar o grafo
 //    public static void main(String[] args) {
@@ -129,5 +155,5 @@ public class Controller {
 //        for (int i = 0; i < lista2.size(); i++) {
 //            System.out.println(lista2.get(i));
 //        }
-//    }
+//    }   
 }

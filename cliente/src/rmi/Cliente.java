@@ -19,6 +19,8 @@ public class Cliente {
         
         try {
             this.guiche = (Guiche) Naming.lookup("rmi://"+endacesso+":1099/servidor");
+            carregarServidores();
+            
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             e.printStackTrace();
         }
@@ -33,5 +35,9 @@ public class Cliente {
     }
     public void comprarRota(String rota) throws RemoteException {
         guiche.comprarRota(rota);
+    }
+    
+    public void carregarServidores() throws RemoteException{
+        guiche.carregarServidores();
     }
 }
