@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class GuicheImp extends UnicastRemoteObject implements Guiche {
 
+    private String nomeServidor;
+    
     @Override
     public void comprarRota(String rota) throws RemoteException {
         this.controller.comprar(rota);
@@ -21,6 +23,7 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
 
     protected GuicheImp(String nomeServidor) throws RemoteException, FileNotFoundException {
         super();
+        this.nomeServidor = nomeServidor;
         this.controller = new Controller(nomeServidor);
         this.controller.criarRotas();
     }
@@ -28,7 +31,12 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
     @Override
     public ArrayList<String> buscarRotas(String origem, String destino) throws RemoteException {
         
-        return controller.buscarRotas(origem, destino);
+
+        ArrayList<String> teste = controller.buscarRotas(origem, destino);
+        for (int i = 0; i < teste.size(); i++) {
+            teste.set(i, teste.get(i) + " -> " + this.nomeServidor);
+        }      
+        return teste;
     }
 
     @Override
