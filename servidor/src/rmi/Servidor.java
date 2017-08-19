@@ -28,9 +28,9 @@ public class Servidor {
             String linha = bf.readLine();
             this.nomeServidor = linha;
             
-            LocateRegistry.createRegistry(1100);
+            LocateRegistry.createRegistry(1099);
             Guiche servidor = new GuicheImp(nomeServidor);
-            Naming.bind("servidor2", (Remote) servidor);
+            Naming.bind(nomeServidor, (Remote) servidor);
             carregarServidores();
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
