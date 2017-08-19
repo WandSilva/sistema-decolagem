@@ -9,12 +9,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import rmi.Guiche;
 import rmi.Servidor;
 
@@ -22,15 +24,17 @@ import rmi.Servidor;
  * Created by wanderson on 28/07/17.
  */
 public class Controller {
-    
-    private ArrayList servidoresConectados = new ArrayList();
 
+    private ArrayList<Guiche> servidoresConectados = new ArrayList();
+
+    private String nomeServidor;
     private Grafo grafo;
     private Stack<String> caminhoAtual;   //Pilha de caminho atual
     private TreeSet<String> visitados;   //Conjunto de vértices visitados no caminho
     private ArrayList<String> rotas;
 
-    public Controller() {
+    public Controller(String nomeServidor) {
+        this.nomeServidor = nomeServidor;
         this.grafo = new Grafo();
         this.rotas = new ArrayList<>();
         this.caminhoAtual = new Stack<>();
@@ -55,7 +59,7 @@ public class Controller {
 
     }
 
-    public ArrayList<String> buscarRotas(String origem, String destino) {
+    public ArrayList<String> buscarRotas(String origem, String destino) throws RemoteException {
 
         caminhoAtual.push(origem);   //Adiciona cidade na pilha
         visitados.add(origem);   //Adiciona cidade na lista de visitadas
@@ -68,7 +72,7 @@ public class Controller {
 
             for (Rota rotas : vizinhos) {   //Percorre a lista de vizinhos
 
-                if (!visitados.contains(rotas.getLocal()) && rotas.getPeso()>0) {   //Se ainda não foi visitada:
+                if (!visitados.contains(rotas.getLocal()) && rotas.getPeso() > 0) {   //Se ainda não foi visitada:
                     //Método recursivo que estabelece caminhos possíveis a partir dela:
                     buscarRotas(rotas.getLocal(), destino);
                 }
@@ -81,6 +85,14 @@ public class Controller {
             ArrayList<String> aux = new ArrayList<>();
             aux.addAll(rotas);
             rotas.clear();
+            for (int i = 0; i < aux.size(); i++) {
+                aux.set(i, aux.get(i) + " -> " + nomeServidor);
+            }
+
+            for (Guiche g: servidoresConectados) {
+                aux.addAll(g.pesquisarRotas(origem,destino));
+            }
+
             return aux;
         }
         return null;
@@ -91,45 +103,46 @@ public class Controller {
     }
 
     public void comprar(String rota) {
-        String aux = rota.replace("[", "").replace("]", "").replace(" ", "");;
+        String aux = rota.replace("[", "").replace("]", "").replace(" ", "");
+        ;
         String[] aux2 = aux.trim().split(",");
 
-        System.out.println("teste: "+aux2);
-        System.out.println("teste: "+aux2.length);
+        System.out.println("teste: " + aux2);
+        System.out.println("teste: " + aux2.length);
         ArrayList<Rota> caminho;
 
         for (int i = 0; i < aux2.length; i++) {
 
-           caminho = grafo.getVizinhos(aux2[i]);
+            caminho = grafo.getVizinhos(aux2[i]);
 
 
             for (int j = 0; j < caminho.size(); j++) {
-                if (i < aux2.length-1) {
-                    if (caminho.get(j).getLocal().equals(aux2[i+1])) {
+                if (i < aux2.length - 1) {
+                    if (caminho.get(j).getLocal().equals(aux2[i + 1])) {
                         caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
                     }
                 }
             }
         }
     }
-    
+
     public void carregarServidores() {
         BufferedReader bf;
         try {
             bf = new BufferedReader(new FileReader("servidores.data"));
             String linha = bf.readLine();
             String[] dados = linha.split(" ");
-            
+
             //System.out.println("passou aqui");
-            
+
             while (linha != null) {
                 dados = linha.split(" ");
-                Guiche guiche = (Guiche) Naming.lookup("rmi://"+dados[0]+":1099/"+dados[1]);
+                Guiche guiche = (Guiche) Naming.lookup("rmi://" + dados[0] + ":1099/" + dados[1]);
 //                System.out.println(guiche.getNomeServidor());
                 servidoresConectados.add(guiche);
                 linha = bf.readLine();
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
