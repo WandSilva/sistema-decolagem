@@ -19,16 +19,22 @@ import java.util.logging.Logger;
 public class Servidor {
 
     private ArrayList servidores = new ArrayList();
+    private String nomeServidor;
 
     public Servidor() {
         try {
-            LocateRegistry.createRegistry(1099);
-            Guiche servidor = new GuicheImp();
-            Naming.bind("servidor", (Remote) servidor);
+            BufferedReader bf;
+            bf = new BufferedReader(new FileReader("nome.data"));
+            String linha = bf.readLine();
+            this.nomeServidor = linha;
+            
+            LocateRegistry.createRegistry(1100);
+            Guiche servidor = new GuicheImp(nomeServidor);
+            Naming.bind("servidor2", (Remote) servidor);
             carregarServidores();
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
