@@ -30,13 +30,14 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
 
     @Override
     public ArrayList<String> pesquisarRotas(String origem, String destino) throws RemoteException {
-
-        
         
         ArrayList<String> teste = controller.buscarRotas(origem, destino);
         for (int i = 0; i < teste.size(); i++) {
             teste.set(i, teste.get(i) + " -> " + this.nomeServidor);
         }
+        
+        
+        
         return teste;
     }
 

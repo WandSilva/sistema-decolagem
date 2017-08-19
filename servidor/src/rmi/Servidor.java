@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by wanderson on 28/07/17.
- */
 public class Servidor {
 
     private String nomeServidor;
@@ -26,9 +23,9 @@ public class Servidor {
             bf = new BufferedReader(new FileReader("nome.data"));
             String linha = bf.readLine();
             this.nomeServidor = linha;
-            LocateRegistry.createRegistry(1099);
+            LocateRegistry.createRegistry(1100);
             Guiche servidor = new GuicheImp(nomeServidor);
-            Naming.bind("servidor", (Remote) servidor);
+            Naming.bind("servidor2", (Remote) servidor);
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
