@@ -13,4 +13,5 @@ public interface Guiche extends Remote {
     public void carregarServidores() throws RemoteException;
     public ArrayList<String> buscarLocais() throws RemoteException;
     public void comprarRota(String rota) throws RemoteException;
+    public String getNomeServidor() throws RemoteException;
 }

@@ -47,4 +47,9 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
     public void carregarServidores() throws RemoteException {
         controller.carregarServidores();
     }
+
+    @Override
+    public String getNomeServidor() throws RemoteException {
+        return controller.getNomeServidor();
+    }
 }
