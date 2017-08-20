@@ -118,11 +118,6 @@ public class Controller {
 
         String[] aux2 = aux.trim().split(",");
 
-<<<<<<< HEAD
-//        System.out.println("teste: " + aux2);
-//        System.out.println("teste: " + aux2.length);
-=======
->>>>>>> master
         ArrayList<Rota> caminho;
 
         for (int i = 0; i < aux2.length; i++) {

@@ -23,7 +23,7 @@ public class Cliente {
         this.endacesso = JOptionPane.showInputDialog(null, "Digite o IP do Servidor de Acesso");
         try {
             BufferedReader bf;
-            bf = new BufferedReader(new FileReader("servidores.data"));
+            bf = new BufferedReader(new FileReader("servidores_C.data"));
             String linha = bf.readLine();
 
             while (linha != null) {
