@@ -99,11 +99,8 @@ public class Controller {
                 aux.addAll(g.buscarRotas(origem, destino));
             }
 
-<<<<<<< HEAD
-            System.out.println("Quant servers" + servidoresConectados.size());
-=======
+
           //  System.out.println("Quant servers"+servidoresConectados.size());
->>>>>>> master
 
           //  servidoresConectados.forEach(servers -> System.out.println(servers));
 
