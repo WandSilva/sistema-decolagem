@@ -99,9 +99,13 @@ public class Controller {
                 aux.addAll(g.buscarRotas(origem, destino));
             }
 
+<<<<<<< HEAD
             System.out.println("Quant servers" + servidoresConectados.size());
+=======
+          //  System.out.println("Quant servers"+servidoresConectados.size());
+>>>>>>> master
 
-            servidoresConectados.forEach(servers -> System.out.println(servers));
+          //  servidoresConectados.forEach(servers -> System.out.println(servers));
 
             return aux;
         }
@@ -117,8 +121,11 @@ public class Controller {
 
         String[] aux2 = aux.trim().split(",");
 
+<<<<<<< HEAD
 //        System.out.println("teste: " + aux2);
 //        System.out.println("teste: " + aux2.length);
+=======
+>>>>>>> master
         ArrayList<Rota> caminho;
 
         for (int i = 0; i < aux2.length; i++) {
