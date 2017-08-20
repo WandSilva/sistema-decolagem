@@ -49,7 +49,7 @@ public class Controller {
             String linha;
             linha = bf.readLine();
             while (linha != null) {
-                String[] aux = linha.trim().split(":");
+                String[] aux = linha.split(":");
                 this.grafo.addTrecho(aux[0], aux[1], aux[2]);
                 linha = bf.readLine();
             }
@@ -61,6 +61,8 @@ public class Controller {
 
     public ArrayList<String> buscarRotas(String origem, String destino) throws RemoteException {
 
+        System.out.println(origem + " " + destino);
+
         caminhoAtual.push(origem);   //Adiciona cidade na pilha
         visitados.add(origem);   //Adiciona cidade na lista de visitadas
 
@@ -69,15 +71,17 @@ public class Controller {
         } else {   //Se não:
             //Pega vizinhos de tal origem no próprio servidor:
             ArrayList<Rota> vizinhos = grafo.getVizinhos(origem);
+            System.out.println(vizinhos.size());
 
             for (Rota rotas : vizinhos) {   //Percorre a lista de vizinhos
-
                 if (!visitados.contains(rotas.getLocal()) && rotas.getPeso() > 0) {   //Se ainda não foi visitada:
                     //Método recursivo que estabelece caminhos possíveis a partir dela:
                     buscarRotas(rotas.getLocal(), destino);
                 }
             }
+
         }
+
         caminhoAtual.pop();   //Remove cidade-topo da pilha
         visitados.remove(origem);   //Remove cidade da lista de visitadas
 
@@ -85,16 +89,17 @@ public class Controller {
             ArrayList<String> aux = new ArrayList<>();
             aux.addAll(rotas);
             rotas.clear();
+
             for (int i = 0; i < aux.size(); i++) {
-                aux.set(i, aux.get(i) + " -> " + nomeServidor);
+                aux.set(i, aux.get(i) + " -> " + this.nomeServidor);
             }
 
-            for (Guiche g: servidoresConectados) {
-                aux.addAll(g.buscarRotas(origem,destino));
+            for (Guiche g : servidoresConectados) {
+
+                aux.addAll(g.buscarRotas(origem, destino));
             }
 
-
-            System.out.println("Quant servers"+servidoresConectados.size());
+            System.out.println("Quant servers" + servidoresConectados.size());
 
             servidoresConectados.forEach(servers -> System.out.println(servers));
 
@@ -103,24 +108,22 @@ public class Controller {
         return null;
     }
 
-
     public ArrayList<String> buscarLocais() {
         return grafo.getVertices();
     }
 
     public void comprar(String rota) {
         String aux = rota.replace("[", "").replace("]", "").replace(" ", "");
-        ;
+
         String[] aux2 = aux.trim().split(",");
 
-        System.out.println("teste: " + aux2);
-        System.out.println("teste: " + aux2.length);
+//        System.out.println("teste: " + aux2);
+//        System.out.println("teste: " + aux2.length);
         ArrayList<Rota> caminho;
 
         for (int i = 0; i < aux2.length; i++) {
 
             caminho = grafo.getVizinhos(aux2[i]);
-
 
             for (int j = 0; j < caminho.size(); j++) {
                 if (i < aux2.length - 1) {
@@ -140,7 +143,6 @@ public class Controller {
             String[] dados = linha.split(" ");
 
             //System.out.println("passou aqui");
-
             while (linha != null) {
                 dados = linha.split(" ");
                 Guiche guiche = (Guiche) Naming.lookup("rmi://" + dados[0] + ":1099/" + dados[1]);

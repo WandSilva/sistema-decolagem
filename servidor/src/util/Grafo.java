@@ -43,6 +43,7 @@ public class Grafo {
     public void addTrecho(String origem, String destino, String peso) {
 
         if (this.grafo.containsKey(origem)) {
+            ArrayList<Rota> vizinhos = this.grafo.get(origem);
             this.grafo.get(origem).add(new Rota(destino, Integer.parseInt(peso)));
         } else {
             ArrayList<Rota> vizinhos = new ArrayList<>();
