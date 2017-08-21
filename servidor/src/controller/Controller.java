@@ -99,11 +99,8 @@ public class Controller {
                 aux.addAll(g.buscarRotas(origem, destino));
             }
 
-
-          //  System.out.println("Quant servers"+servidoresConectados.size());
-
-          //  servidoresConectados.forEach(servers -> System.out.println(servers));
-
+            //  System.out.println("Quant servers"+servidoresConectados.size());
+            //  servidoresConectados.forEach(servers -> System.out.println(servers));
             return aux;
         }
         return null;
@@ -114,25 +111,44 @@ public class Controller {
     }
 
     public void comprar(String rota) {
-        String aux = rota.replace("[", "").replace("]", "").replace(" ", "");
+        if (rota.contains(this.nomeServidor)) {
+            String aux = rota.replace("[", "").replace("]", "").replace(" ", "").replace("->" + this.getNomeServidor(), "");
+            System.out.println(aux);
 
-        String[] aux2 = aux.trim().split(",");
+            String[] aux2 = aux.trim().split(",");
 
-        ArrayList<Rota> caminho;
+            ArrayList<Rota> caminho;
 
-        for (int i = 0; i < aux2.length; i++) {
+            for (int i = 0; i < aux2.length; i++) {
 
-            caminho = grafo.getVizinhos(aux2[i]);
+                caminho = grafo.getVizinhos(aux2[i]);
 
-            for (int j = 0; j < caminho.size(); j++) {
-                if (i < aux2.length - 1) {
-                    if (caminho.get(j).getLocal().equals(aux2[i + 1])) {
-                        caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
+                for (int j = 0; j < caminho.size(); j++) {
+                    if (i < aux2.length - 1) {
+                        if (caminho.get(j).getLocal().equals(aux2[i + 1])) {
+                            caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
+                        }
                     }
                 }
             }
         }
-    }
+        
+        else {
+           
+               try {
+                   
+                   for (Guiche g : servidoresConectados) {
+                   
+                   if(rota.contains(g.getNomeServidor())){
+                       g.comprarRota(rota);      
+                   }
+                }
+               } catch (RemoteException ex) {
+                   Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+               }
+           } 
+        }
+    
 
     public void carregarServidores() {
         BufferedReader bf;
@@ -176,4 +192,8 @@ public class Controller {
 //            System.out.println(lista2.get(i));
 //        }
 //    }   
+
+    public String getNomeServidor() {
+        return nomeServidor;
+    }
 }
