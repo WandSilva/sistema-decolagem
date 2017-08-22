@@ -54,8 +54,8 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
     }
 
     @Override
-    public void reservarRota(String rota) throws RemoteException {
-        controller.reservarRota(rota);
+    public boolean reservarRota(String rota) throws RemoteException {
+        return controller.reservarRota(rota);
     }
 
     @Override

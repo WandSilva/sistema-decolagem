@@ -59,8 +59,8 @@ public class Cliente {
         guiche.comprarRota(rota);
     }
     
-    public void reservarRota(String rota) throws RemoteException{
-        guiche.reservarRota(rota);
+    public boolean reservarRota(String rota) throws RemoteException{
+        return guiche.reservarRota(rota);
     }
 
     public void carregarServidores() throws RemoteException {

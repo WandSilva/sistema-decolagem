@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import rmi.Cliente;
 
+import javax.swing.*;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -79,8 +80,10 @@ public class FxmlViewController implements Initializable {
 
     public void reservarRotas(){
         try {
-            cliente.reservarRota(listViewReserva.getSelectionModel().getSelectedItem());
-            listViewCompra.getItems().add(listViewReserva.getSelectionModel().getSelectedItem());
+            boolean x = cliente.reservarRota(listViewReserva.getSelectionModel().getSelectedItem());
+            if(x)
+                listViewCompra.getItems().add(listViewReserva.getSelectionModel().getSelectedItem());
+            else JOptionPane.showMessageDialog(null,"Rota Indisponível.\n\n\nProfessora, Isso vale 3 pontos");
         } catch (RemoteException ex) {
             Logger.getLogger(FxmlViewController.class.getName()).log(Level.SEVERE, null, ex);
         }

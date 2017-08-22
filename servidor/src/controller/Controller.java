@@ -13,7 +13,6 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 import rmi.Guiche;
 import rmi.Servidor;
@@ -194,7 +193,7 @@ public class Controller {
         return nomeServidor;
     }
 
-    public void reservarRota(String rota) {
+    public boolean reservarRota(String rota) {
         if (rota.contains(this.nomeServidor)) {
             String aux = rota.replace("[", "").replace("]", "").replace(" ", "").replace("->" + this.getNomeServidor(), "");
             //System.out.println(aux);
@@ -209,9 +208,10 @@ public class Controller {
 
                 for (int j = 0; j < caminho.size(); j++) {
                     if (i < aux2.length - 1) {
-                        if (caminho.get(j).getLocal().equals(aux2[i + 1]) && caminho.get(j).getPeso() >= 1) {
+                        if (caminho.get(j).getLocal().equals(aux2[i + 1]) && caminho.get(j).getPeso() > 0) {
                             caminho.get(j).getInteressados().add(id);
                             caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
+                            return true;
                         }
                     }
                 }
@@ -230,6 +230,7 @@ public class Controller {
                 Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return false;
     }
 
     public void setID(String id) {
