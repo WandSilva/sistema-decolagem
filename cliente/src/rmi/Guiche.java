@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- * Created by wanderson on 28/07/17.
+ * Interface que Cliente deve implementar para utilizar os serviços da camada RMI. 
  */
 public interface Guiche extends Remote {
     public ArrayList<String> buscarRotas(String origem, String destino) throws RemoteException;

@@ -2,9 +2,7 @@ package rmi;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -12,7 +10,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- * Created by wanderson on 28/07/17.
+ * Classe responsável por encapsular as informações dos compradores de passagens
+ * areas.
  */
 public class Cliente {
 
@@ -20,6 +19,9 @@ public class Cliente {
     private String endacesso;
     private String id;
 
+    /**
+     * Contrutor da Classe Cliente.
+     */
     public Cliente() {
         this.id = JOptionPane.showInputDialog(null, "Digite o seu ID");
         this.endacesso = JOptionPane.showInputDialog(null, "Digite o IP do Servidor de Acesso");
@@ -35,7 +37,6 @@ public class Cliente {
                 }
                 linha = bf.readLine();
             }
-
             carregarServidores();
 
         } catch (Exception ex) {
@@ -43,26 +44,54 @@ public class Cliente {
         }
     }
 
+    /**
+     * Método responsável por buscar os locais de interesse.
+     */
     public ArrayList<String> buscarLocais() {
         return guiche.buscarLocais();
     }
-    
-    public void setID(String id) throws RemoteException{
+
+    /**
+     * Método responsável por identificar um usuário.
+     *
+     * @param id nome do usuário
+     */
+    public void setID(String id) throws RemoteException {
         guiche.setID(id);
     }
 
+    /**
+     * Método responsável por buscar as rotas.
+     *
+     * @param orgigem cidade de partida
+     * @param destino cidade de destino
+     */
     public ArrayList<String> buscarRotas(String orgigem, String destino) throws RemoteException {
         return guiche.buscarRotas(orgigem, destino);
     }
 
+    /**
+     * Método responsável por adquirir uma rota específica
+     *
+     * @param rota trecho adquirido
+     */
     public void comprarRota(String rota) throws RemoteException {
         guiche.comprarRota(rota);
     }
-    
-    public boolean reservarRota(String rota) throws RemoteException{
+
+    /**
+     * Método responsável por reservar uma rota.
+     *
+     * @param rota rota desejada
+     */
+    public boolean reservarRota(String rota) throws RemoteException {
         return guiche.reservarRota(rota);
     }
 
+    /**
+     * Método responsável por estabelecer as conexões entre os servidores das
+     * companhias.
+     */
     public void carregarServidores() throws RemoteException {
         guiche.carregarServidores();
     }

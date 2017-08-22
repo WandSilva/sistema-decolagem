@@ -3,12 +3,12 @@ package util;
 import java.util.*;
 
 /**
- * Created by wanderson on 29/07/17.
+ * Classe que responsável por modelar os trechos e os possíveis caminhos existentes.
  */
+
 public class Grafo {
 
     private HashMap<String, ArrayList<Rota>> grafo;   //Lista de adjacência
-
 
     /**
      * Construtor da classe, o grafo é inicializado.
@@ -27,6 +27,12 @@ public class Grafo {
         return (this.grafo.get(origem));
     }
 
+    
+    /**
+     * Método que retorna as cidades existentes na estrutura.
+     *
+     * @return ArrayList
+     */
 
     public ArrayList<String> getVertices(){
         ArrayList<String> lista = new ArrayList<>();
@@ -35,7 +41,7 @@ public class Grafo {
     }
 
     /**
-     * Método que recebe a origem e o destino, e cria um trecho entre eles.
+     * Método que recebe a origem, destino e a quantidade de passagens e cria um trecho entre eles.
      *
      * @param origem
      * @param destino
@@ -51,15 +57,4 @@ public class Grafo {
             this.grafo.put(origem, vizinhos);
         }
     }
-
-    public void teste() {
-        for (String name : grafo.keySet()) {
-
-            String key = name.toString();
-            String value = grafo.get(name).toString();
-            System.out.println(key + " " + value);
-        }
-    }
-
 }
-

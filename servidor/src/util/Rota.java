@@ -3,7 +3,7 @@ package util;
 import java.util.ArrayList;
 
 /**
- * Created by wanderson on 14/08/17.
+ * Classe que modela uma caminho entre duas localidades.
  */
 public class Rota {
     
@@ -11,43 +11,50 @@ public class Rota {
     private int peso;
     private ArrayList<String> interessados = new ArrayList();
 
+/**
+ * Construtor da Classe Rota.
+ * @param local destino
+ * @param peso quantidade de passagens
+ */
     public Rota(String local, int peso) {
         this.local = local;
         this.peso = peso;
     }
 
+/**
+ * Método por retorna o destino.
+ */
     public String getLocal() {
         return local;
     }
+    
+/**
+ * Método que modifica o destino.
+ */
 
     public void setLocal(String local) {
         this.local = local;
     }
-
+    
+ /**
+ * Obter a quantidade de passagens disponíveis para o trecho.
+ */
     public int getPeso() {
         return peso;
     }
 
+/**
+ * Modificar a quantidade de passagens disponíveis para o trecho.
+ */ 
+    
     public void setPeso(int peso) {
         this.peso = peso;
     }
     
+ /**
+ * Obter a lista de interessados em uma determinada rota.
+ */
     
-
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (obj instanceof Rota) {
-//            Rota rota = (Rota) obj;
-//            if (this.local.equals(rota.local)) {
-//                
-//            } else {
-//                return false;
-//            }
-//        }
-//
-//        return false;
-//    }
-
     public ArrayList<String> getInteressados() {
         return interessados;
     }  

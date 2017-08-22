@@ -1,7 +1,6 @@
 package rmi;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -9,14 +8,19 @@ import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+/**
+ * Classe responsável por encapsular os parâmetros para utilização do RMI pelos servidores das companhias
+ * areas.
+ */
 
 public class Servidor {
 
     private String nomeServidor;
 
+/**
+ * Construtor da Classe Servidor.
+ */   
     public Servidor() {
         try {
             BufferedReader bf;
@@ -33,6 +37,9 @@ public class Servidor {
         }
     }
 
+/**
+ * Método para a execução dos servidores
+ */    
     public static void main(String args[]) {
         Servidor servidor = new Servidor();
         System.out.println("Servidor iniciado");
