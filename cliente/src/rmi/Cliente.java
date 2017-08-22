@@ -18,8 +18,10 @@ public class Cliente {
 
     private Guiche guiche;
     private String endacesso;
+    private String id;
 
     public Cliente() {
+        this.id = JOptionPane.showInputDialog(null, "Digite o seu ID");
         this.endacesso = JOptionPane.showInputDialog(null, "Digite o IP do Servidor de Acesso");
         try {
             BufferedReader bf;
@@ -44,6 +46,10 @@ public class Cliente {
     public ArrayList<String> buscarLocais() {
         return guiche.buscarLocais();
     }
+    
+    public void setID(String id) throws RemoteException{
+        guiche.setID(id);
+    }
 
     public ArrayList<String> buscarRotas(String orgigem, String destino) throws RemoteException {
         return guiche.buscarRotas(orgigem, destino);
@@ -51,6 +57,10 @@ public class Cliente {
 
     public void comprarRota(String rota) throws RemoteException {
         guiche.comprarRota(rota);
+    }
+    
+    public void reservarRota(String rota) throws RemoteException{
+        guiche.reservarRota(rota);
     }
 
     public void carregarServidores() throws RemoteException {

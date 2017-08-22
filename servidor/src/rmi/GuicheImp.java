@@ -52,4 +52,14 @@ public class GuicheImp extends UnicastRemoteObject implements Guiche {
     public String getNomeServidor() throws RemoteException {
         return controller.getNomeServidor();
     }
+
+    @Override
+    public void reservarRota(String rota) throws RemoteException {
+        controller.reservarRota(rota);
+    }
+
+    @Override
+    public void setID(String id) throws RemoteException {
+        controller.setID(id);
+    }
 }

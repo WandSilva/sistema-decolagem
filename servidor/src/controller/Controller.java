@@ -13,6 +13,7 @@ import java.util.Stack;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 import rmi.Guiche;
 import rmi.Servidor;
@@ -23,6 +24,8 @@ import rmi.Servidor;
 public class Controller {
 
     private ArrayList<Guiche> servidoresConectados = new ArrayList();
+    
+    private String id;
 
     private String nomeServidor;
     private Grafo grafo;
@@ -31,6 +34,7 @@ public class Controller {
     private ArrayList<String> rotas;
 
     public Controller(String nomeServidor) {
+        
         this.nomeServidor = nomeServidor;
         this.grafo = new Grafo();
         this.rotas = new ArrayList<>();
@@ -58,7 +62,7 @@ public class Controller {
 
     public ArrayList<String> buscarRotas(String origem, String destino) throws RemoteException {
 
-        System.out.println(origem + " " + destino);
+        //System.out.println(origem + " " + destino);
 
         caminhoAtual.push(origem);   //Adiciona cidade na pilha
         visitados.add(origem);   //Adiciona cidade na lista de visitadas
@@ -68,7 +72,7 @@ public class Controller {
         } else {   //Se não:
             //Pega vizinhos de tal origem no próprio servidor:
             ArrayList<Rota> vizinhos = grafo.getVizinhos(origem);
-            System.out.println(vizinhos.size());
+            //System.out.println(vizinhos.size());
 
             for (Rota rotas : vizinhos) {   //Percorre a lista de vizinhos
                 if (!visitados.contains(rotas.getLocal()) && rotas.getPeso() > 0) {   //Se ainda não foi visitada:
@@ -110,7 +114,7 @@ public class Controller {
     public void comprar(String rota) {
         if (rota.contains(this.nomeServidor)) {
             String aux = rota.replace("[", "").replace("]", "").replace(" ", "").replace("->" + this.getNomeServidor(), "");
-            System.out.println(aux);
+            //System.out.println(aux);
 
             String[] aux2 = aux.trim().split(",");
 
@@ -122,30 +126,27 @@ public class Controller {
 
                 for (int j = 0; j < caminho.size(); j++) {
                     if (i < aux2.length - 1) {
-                        if (caminho.get(j).getLocal().equals(aux2[i + 1])) {
-                            caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
+                        if (caminho.get(j).getLocal().equals(aux2[i + 1]) && caminho.get(j).getInteressados().contains(id)) {
+                            caminho.get(j).setPeso(caminho.get(j).getPeso());
                         }
                     }
+                }  
+            }
+        } else {
+
+            try {
+
+                for (Guiche g : servidoresConectados) {
+
+                    if (rota.contains(g.getNomeServidor())) {
+                        g.comprarRota(rota);
+                    }
                 }
+            } catch (RemoteException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        else {
-           
-               try {
-                   
-                   for (Guiche g : servidoresConectados) {
-                   
-                   if(rota.contains(g.getNomeServidor())){
-                       g.comprarRota(rota);      
-                   }
-                }
-               } catch (RemoteException ex) {
-                   Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-               }
-           } 
-        }
-    
+    }
 
     public void carregarServidores() {
         BufferedReader bf;
@@ -189,8 +190,49 @@ public class Controller {
 //            System.out.println(lista2.get(i));
 //        }
 //    }   
-
     public String getNomeServidor() {
         return nomeServidor;
+    }
+
+    public void reservarRota(String rota) {
+        if (rota.contains(this.nomeServidor)) {
+            String aux = rota.replace("[", "").replace("]", "").replace(" ", "").replace("->" + this.getNomeServidor(), "");
+            //System.out.println(aux);
+
+            String[] aux2 = aux.trim().split(",");
+
+            ArrayList<Rota> caminho;
+
+            for (int i = 0; i < aux2.length; i++) {
+
+                caminho = grafo.getVizinhos(aux2[i]);
+
+                for (int j = 0; j < caminho.size(); j++) {
+                    if (i < aux2.length - 1) {
+                        if (caminho.get(j).getLocal().equals(aux2[i + 1]) && caminho.get(j).getPeso() >= 1) {
+                            caminho.get(j).getInteressados().add(id);
+                            caminho.get(j).setPeso(caminho.get(j).getPeso() - 1);
+                        }
+                    }
+                }
+            }
+        } else {
+
+            try {
+
+                for (Guiche g : servidoresConectados) {
+
+                    if (rota.contains(g.getNomeServidor())) {
+                        g.reservarRota(rota);
+                    }
+                }
+            } catch (RemoteException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void setID(String id) {
+         this.id = id;
     }
 }

@@ -13,6 +13,8 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by wanderson on 28/07/17.
@@ -67,7 +69,6 @@ public class FxmlViewController implements Initializable {
     }
 
     public void comprarRota() {
-
         try {
             cliente.comprarRota(listViewCompra.getSelectionModel().getSelectedItem());
             listViewCompra.getItems().clear();
@@ -77,7 +78,12 @@ public class FxmlViewController implements Initializable {
     }
 
     public void reservarRotas(){
-        listViewCompra.getItems().add(listViewReserva.getSelectionModel().getSelectedItem());
+        try {
+            cliente.reservarRota(listViewReserva.getSelectionModel().getSelectedItem());
+            listViewCompra.getItems().add(listViewReserva.getSelectionModel().getSelectedItem());
+        } catch (RemoteException ex) {
+            Logger.getLogger(FxmlViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void mudarTelas(ActionEvent event) {
