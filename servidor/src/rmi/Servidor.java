@@ -23,9 +23,9 @@ public class Servidor {
             bf = new BufferedReader(new FileReader("nome.data"));
             String linha = bf.readLine();
             this.nomeServidor = linha;
-            LocateRegistry.createRegistry(1100);
+            LocateRegistry.createRegistry(1099);
             Guiche servidor = new GuicheImp(nomeServidor);
-            Naming.bind("servidor2", (Remote) servidor);
+            Naming.bind("servidor1", (Remote) servidor);
         } catch (RemoteException | MalformedURLException | AlreadyBoundException e) {
             e.printStackTrace();
         } catch (Exception e) {

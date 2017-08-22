@@ -3,7 +3,9 @@ package view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import rmi.Cliente;
 
@@ -24,7 +26,18 @@ public class FxmlViewController implements Initializable {
     private ComboBox<String> comboOrigem;
 
     @FXML
-    private ListView<String> listView;
+    private ListView<String> listViewCompra;
+    @FXML
+    private ListView<String> listViewReserva;
+    @FXML
+    private Button btnReservar;
+    @FXML
+    private Button btnComprar;
+    @FXML
+    private Button btnBuscar;
+    @FXML
+    private Button btnMudaTela;
+    private int contadorTela=0;
 
 
     Cliente cliente;
@@ -32,6 +45,8 @@ public class FxmlViewController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         cliente = new Cliente();
+        this.desabilitarTelaCompra();
+        this.habilitarTelaReserva();
         obterLocais();
     }
 
@@ -43,8 +58,8 @@ public class FxmlViewController implements Initializable {
     public void buscar(ActionEvent e) {
         try {
             ArrayList<String> lista = cliente.buscarRotas(comboOrigem.getValue(), comboDestino.getValue());
-            listView.getItems().clear();
-            listView.getItems().addAll(lista);
+            listViewReserva.getItems().clear();
+            listViewReserva.getItems().addAll(lista);
             System.out.println(lista);
         } catch (RemoteException e1) {
             e1.printStackTrace();
@@ -54,10 +69,55 @@ public class FxmlViewController implements Initializable {
     public void comprarRota() {
 
         try {
-            cliente.comprarRota(listView.getSelectionModel().getSelectedItem());
-            listView.getItems().clear();
+            cliente.comprarRota(listViewCompra.getSelectionModel().getSelectedItem());
+            listViewCompra.getItems().clear();
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    public void reservarRotas(){
+        listViewCompra.getItems().add(listViewReserva.getSelectionModel().getSelectedItem());
+    }
+
+    public void mudarTelas(ActionEvent event) {
+        if (contadorTela ==0){
+            this.desabilitarTelaCompra();
+            this.habilitarTelaReserva();
+            contadorTela=1;
+        }
+        else {
+            this.desabilitarTelaReserva();
+            this.habilitarTelaCompra();
+            contadorTela=0;
+        }
+    }
+
+    public void desabilitarTelaReserva() {
+        this.btnReservar.setVisible(false);
+        this.listViewReserva.setVisible(false);
+        this.comboDestino.setDisable(true);
+        this.comboOrigem.setDisable(true);
+        this.btnBuscar.setDisable(true);
+    }
+
+    public void habilitarTelaReserva() {
+        this.btnReservar.setVisible(true);
+        this.listViewReserva.setVisible(true);
+        this.comboDestino.setDisable(false);
+        this.comboOrigem.setDisable(false);
+        this.btnBuscar.setDisable(false);
+        btnMudaTela.setText("Ver reservas");
+    }
+
+    public void desabilitarTelaCompra() {
+        btnComprar.setVisible(false);
+        listViewCompra.setVisible(false);
+    }
+
+    public void habilitarTelaCompra() {
+        btnComprar.setVisible(true);
+        listViewCompra.setVisible(true);
+        btnMudaTela.setText("Voltar");
     }
 }

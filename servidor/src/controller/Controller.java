@@ -5,13 +5,10 @@ import java.io.BufferedReader;
 import util.Grafo;
 import util.Rota;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.logging.Level;
