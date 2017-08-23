@@ -18,12 +18,12 @@ import rmi.Guiche;
 import rmi.Servidor;
 
 /**
- * Created by wanderson on 28/07/17.
+ * Classe que é responsável por realizar as transações nos servidores.
  */
 public class Controller {
 
     private ArrayList<Guiche> servidoresConectados = new ArrayList();
-    
+
     private String id;
 
     private String nomeServidor;
@@ -32,8 +32,13 @@ public class Controller {
     private TreeSet<String> visitados;   //Conjunto de vértices visitados no caminho
     private ArrayList<String> rotas;
 
+    /**
+     * Construtor da Classe Controller.
+     *
+     * @param nomeServidor nome do servidor.
+     */
     public Controller(String nomeServidor) {
-        
+
         this.nomeServidor = nomeServidor;
         this.grafo = new Grafo();
         this.rotas = new ArrayList<>();
@@ -41,6 +46,10 @@ public class Controller {
         this.visitados = new TreeSet<>();
     }
 
+    /**
+     * Método que responsável por criar as rotas com base no arquivo carregado
+     * no início da execução.
+     */
     public void criarRotas() {
 
         try {
@@ -56,12 +65,15 @@ public class Controller {
         } catch (Exception ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Método que busca as rotas com base em uma origem e destino.
+     *
+     * @param origem localidade origem
+     * @param destino localidade destino
+     */
     public ArrayList<String> buscarRotas(String origem, String destino) throws RemoteException {
-
-        //System.out.println(origem + " " + destino);
 
         caminhoAtual.push(origem);   //Adiciona cidade na pilha
         visitados.add(origem);   //Adiciona cidade na lista de visitadas
@@ -79,7 +91,6 @@ public class Controller {
                     buscarRotas(rotas.getLocal(), destino);
                 }
             }
-
         }
 
         caminhoAtual.pop();   //Remove cidade-topo da pilha
@@ -94,10 +105,10 @@ public class Controller {
                 aux.set(i, aux.get(i) + " -> " + this.nomeServidor);
             }
 
-            for (Guiche g : servidoresConectados) {
+           for (Guiche g : servidoresConectados) {
 
-                aux.addAll(g.buscarRotas(origem, destino));
-            }
+                    aux.addAll(g.buscarRotas(origem, destino));
+                }
 
             //  System.out.println("Quant servers"+servidoresConectados.size());
             //  servidoresConectados.forEach(servers -> System.out.println(servers));
@@ -106,14 +117,21 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Método que busca os locais.
+     */
     public ArrayList<String> buscarLocais() {
         return grafo.getVertices();
     }
 
+    /**
+     * Método que realiza a compra de uma rota.
+     *
+     * @param rota rota desejada
+     */
     public void comprar(String rota) {
         if (rota.contains(this.nomeServidor)) {
             String aux = rota.replace("[", "").replace("]", "").replace(" ", "").replace("->" + this.getNomeServidor(), "");
-            //System.out.println(aux);
 
             String[] aux2 = aux.trim().split(",");
 
@@ -129,12 +147,11 @@ public class Controller {
                             caminho.get(j).setPeso(caminho.get(j).getPeso());
                         }
                     }
-                }  
+                }
             }
         } else {
 
             try {
-
                 for (Guiche g : servidoresConectados) {
 
                     if (rota.contains(g.getNomeServidor())) {
@@ -147,6 +164,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Método responsável por estabelecer as conexões entre os servidores das
+     * companhias.
+     */
     public void carregarServidores() {
         BufferedReader bf;
         try {
@@ -157,9 +178,11 @@ public class Controller {
             //System.out.println("passou aqui");
             while (linha != null) {
                 dados = linha.split(" ");
+                //System.out.println(linha);
                 Guiche guiche = (Guiche) Naming.lookup("rmi://" + dados[0] + ":1099/" + dados[1]);
 //                System.out.println(guiche.getNomeServidor());
-                servidoresConectados.add(guiche);
+                if (!servidoresConectados.contains(guiche))
+                    servidoresConectados.add(guiche);
                 linha = bf.readLine();
             }
 
@@ -168,35 +191,21 @@ public class Controller {
         }
     }
 
-//    //usando para testar o grafo
-//    public static void main(String[] args) {
-//        Controller c = new Controller();
-//        try {
-//            c.criarRotas();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        ArrayList lista1=c.buscarLocais();
-//
-//        System.out.println("_______locais___________");
-//        for (int i = 0; i < lista1.size(); i++) {
-//            System.out.println(lista1.get(i));
-//        }
-//
-//        ArrayList lista2 = c.buscarRotas("A", "B");
-//        System.out.println("_______caminho___________");
-//        for (int i = 0; i < lista2.size(); i++) {
-//            System.out.println(lista2.get(i));
-//        }
-//    }   
+    /**
+     * Método responsável por obter o nome do servidor.
+     */
     public String getNomeServidor() {
         return nomeServidor;
     }
 
+    /**
+     * Método responsável por reservar uma rota.
+     *
+     * @param rota rota desejada
+     */
     public boolean reservarRota(String rota) {
         if (rota.contains(this.nomeServidor)) {
             String aux = rota.replace("[", "").replace("]", "").replace(" ", "").replace("->" + this.getNomeServidor(), "");
-            //System.out.println(aux);
 
             String[] aux2 = aux.trim().split(",");
 
@@ -217,7 +226,6 @@ public class Controller {
                 }
             }
         } else {
-
             try {
 
                 for (Guiche g : servidoresConectados) {
@@ -233,7 +241,12 @@ public class Controller {
         return false;
     }
 
+    /**
+     * Método responsável por identificar um usuário.
+     *
+     * @param id nome do usuário
+     */
     public void setID(String id) {
-         this.id = id;
+        this.id = id;
     }
 }
